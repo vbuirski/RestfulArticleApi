@@ -53,7 +53,7 @@ public class ArticleServiceTest {
             2,
             ids,
             new ArrayList<>(Arrays.asList("fitness", "science")));
-    Assert.assertEquals(expected.getArticles(), tagMetric.getArticles());
+    Assert.assertTrue(expected.getArticles().containsAll(tagMetric.getArticles()));
     Assert.assertEquals(expected.getRelated_tags(), tagMetric.getRelated_tags());
   }
 

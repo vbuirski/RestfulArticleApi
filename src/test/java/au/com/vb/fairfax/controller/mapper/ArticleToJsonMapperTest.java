@@ -13,7 +13,7 @@ public class ArticleToJsonMapperTest {
   public void shouldTransformArticleToJson() throws IOException {
 
     ObjectMapper objectMapper = new ObjectMapper();
-    Article expectedArticle = objectMapper.readValue(new File("target/Article.json"), Article.class);
+    Article expectedArticle = objectMapper.readValue(new File("resources/Article.json"), Article.class);
     String expectedArticleJson = objectMapper.writeValueAsString(expectedArticle);
 
     String articleJson = new StringBuilder("{")
