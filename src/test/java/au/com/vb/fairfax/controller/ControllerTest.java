@@ -1,6 +1,5 @@
 package au.com.vb.fairfax.controller;
 
-import au.com.vb.fairfax.controller.Controller;
 import au.com.vb.fairfax.model.Article;
 import au.com.vb.fairfax.service.ArticleService;
 import java.util.ArrayList;
