@@ -30,11 +30,6 @@ public class ArticleService {
 
   public TagMetric retrieveTagForNameAndDate(String name, String date) {
 
- /*   TagMetric tagDetails = new TagMetric("health",
-                                          17,
-                                          new ArrayList<String>(Arrays.asList("1", "7")),
-                                          new ArrayList<>(Arrays.asList("science", "fitness")));
-*/
     TagMetric tagMetrics;
     synchronized (this) {
        Integer count = countTags(name);
