@@ -30,49 +30,12 @@ public class ArticleService {
 
   public TagMetric retrieveTagForNameAndDate(String name, String date) {
 
-    String newDate = formatDate(date);
-
-    TagMetric tagMetrics;
-    synchronized (this) {
-       Integer count = countTags(name, newDate);
-       List<String> articles = getArticleIdsForTag(name, newDate);
-       List<String> relatedTags = getRelatedTags(name);
-
-       tagMetrics = new TagMetric(name, count, articles, relatedTags);
-     }
-    return tagMetrics;
-
+    return buildMetrics(name, formatDate(date));
   }
 
-  private Integer countTags(String tag, String date) {
+  private synchronized TagMetric buildMetrics(String tag, String date) {
     Integer count = 0;
-    Iterator it = articles.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry pair = (Map.Entry) it.next();
-      Article article = (Article) pair.getValue();
-      if (article.getTags().contains(tag) && date.equals(article.getDate())) {
-        count++;
-      }
-    }
-    return count++;
-  }
-
-  private List<String> getArticleIdsForTag(String tag, String date) {
-    List<String> ids = new ArrayList<>();
-
-    Iterator it = articles.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry pair = (Map.Entry) it.next();
-      Article article = (Article) pair.getValue();
-      if (article.getTags().contains(tag) && date.equals(article.getDate())) {
-        ids.add(article.getId());
-      }
-    }
-    return ids;
-  }
-
-  private List<String> getRelatedTags(String tag) {
-    List<String> relatedTags = new ArrayList<>();
+    List<String> articleIds = new ArrayList<String>();
     List<String> allRelatedTags = new ArrayList<>();
 
     Iterator it = articles.entrySet().iterator();
@@ -80,15 +43,17 @@ public class ArticleService {
       Map.Entry pair = (Map.Entry) it.next();
       Article article = (Article) pair.getValue();
       List<String> tags = new ArrayList<>();
-      if (article.getTags().contains(tag)) {
+      if (article.getTags().contains(tag) && date.equals(article.getDate())) {
+        count++;
+        articleIds.add(article.getId());
         tags = article.getTags().stream()
                 .filter(p -> !p.equalsIgnoreCase(tag)).collect(Collectors.toList());
       }
-      Set<String> relatedTagSet = new LinkedHashSet<>(relatedTags);
+      Set<String> relatedTagSet = new LinkedHashSet<>(allRelatedTags);
       relatedTagSet.addAll(tags);
       allRelatedTags = new ArrayList<>(relatedTagSet);
     }
-    return allRelatedTags;
+    return new TagMetric(tag, count, articleIds, allRelatedTags);
   }
 
   private String formatDate(String date) {
