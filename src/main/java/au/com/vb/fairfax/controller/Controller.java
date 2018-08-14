@@ -51,6 +51,6 @@ public class Controller {
   public TagMetric retrieveTagForNameAndDate(@PathVariable String tagName,
                                              @PathVariable String date) {
     log.info("Request to retrieve tag metrics for tag name: {} and date: {}", tagName, date);
-    return articleService.retrieveTagForNameAndDate(tagName, date);
+    return articleService.retrieveTagsForNameAndDate(tagName, date);
   }
 }
