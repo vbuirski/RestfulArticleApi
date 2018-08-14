@@ -20,7 +20,7 @@ public class ArticleService {
 
   public Article retrieveArticle(String id) {
 
-    Article article = articleRepository.getArticles().entrySet()
+   Article article = articleRepository.getArticles().entrySet()
             .stream()
             .filter(e -> e.getKey().equals(id))
             .map(Map.Entry::getValue)
@@ -31,6 +31,17 @@ public class ArticleService {
 
   public TagMetric retrieveTagsForNameAndDate(String name, String date) {
 
+    Article article = articles.entrySet()
+                      .stream()
+                      .filter(e -> e.getKey().equals(id))
+                      .map(Map.Entry::getValue)
+                      .findFirst()
+                      .orElse(null);
+    return article;
+  }
+
+  public TagMetric retrieveTagForNameAndDate(String name, String date) {
+
     return buildMetrics(name, formatDate(date));
   }
 
@@ -40,6 +51,7 @@ public class ArticleService {
     List<String> allRelatedTags = new ArrayList<>();
 
     Iterator it = articleRepository.getArticles().entrySet().iterator();
+
     while (it.hasNext()) {
       Map.Entry pair = (Map.Entry) it.next();
       Article article = (Article) pair.getValue();

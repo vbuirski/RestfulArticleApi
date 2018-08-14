@@ -4,7 +4,6 @@ import au.com.vb.fairfax.model.Article;
 import au.com.vb.fairfax.model.TagMetric;
 import au.com.vb.fairfax.service.ArticleService;
 import java.net.URI;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +48,9 @@ public class Controller {
   }
 
   @GetMapping("/articles/{tagName}/{date}")
-  public TagMetric retrieveTagsForNameAndDate(@PathVariable String tagName,
-                                              @PathVariable String date) {
-    log.info("Request to retrieve Article for name: {} and date: {}", tagName, date);
-    return articleService.retrieveTagsForNameAndDate(tagName, date);
+  public TagMetric retrieveTagForNameAndDate(@PathVariable String tagName,
+                                             @PathVariable String date) {
+    log.info("Request to retrieve tag metrics for tag name: {} and date: {}", tagName, date);
+    return articleService.retrieveTagForNameAndDate(tagName, date);
   }
 }
