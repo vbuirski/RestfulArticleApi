@@ -45,7 +45,7 @@ public class ArticleServiceTest {
     String tagName = article1.getTags().get(0);
 
     ObjectMapper objectMapper = new ObjectMapper();
-    TagMetric tagMetric = articleService.retrieveTagsForNameAndDate(tagName, article1.getDate());
+    TagMetric tagMetric = articleService.retrieveTagsForNameAndDate(tagName, "20160922");
     objectMapper.writeValue(new File("target/metrics.json"), tagMetric);
 
     List<String> ids = new ArrayList<>(Arrays.asList(article1.getId(), article2.getId()));
