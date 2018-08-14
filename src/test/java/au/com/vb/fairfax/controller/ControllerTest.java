@@ -67,7 +67,7 @@ public class ControllerTest {
   @Test
   public void createArticle() throws Exception {
 
-    // articleService.addArticle to respond back with mockCourse
+    // articleService.addArticle to respond back with mockArticle
     Mockito.when(
             articleService.createArticle(
                     Mockito.any(Article.class))).thenReturn(mockArticle);

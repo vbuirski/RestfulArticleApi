@@ -30,10 +30,12 @@ public class ArticleService {
 
   public TagMetric retrieveTagForNameAndDate(String name, String date) {
 
+    String newDate = formatDate(date);
+
     TagMetric tagMetrics;
     synchronized (this) {
-       Integer count = countTags(name);
-       List<String> articles = getArticleIdsForTag(name);
+       Integer count = countTags(name, newDate);
+       List<String> articles = getArticleIdsForTag(name, newDate);
        List<String> relatedTags = getRelatedTags(name);
 
        tagMetrics = new TagMetric(name, count, articles, relatedTags);
@@ -42,27 +44,27 @@ public class ArticleService {
 
   }
 
-  private Integer countTags(String tag) {
+  private Integer countTags(String tag, String date) {
     Integer count = 0;
     Iterator it = articles.entrySet().iterator();
     while (it.hasNext()) {
       Map.Entry pair = (Map.Entry) it.next();
       Article article = (Article) pair.getValue();
-      if (article.getTags().contains(tag)) {
+      if (article.getTags().contains(tag) && date.equals(article.getDate())) {
         count++;
       }
     }
     return count++;
   }
 
-  private List<String> getArticleIdsForTag(String tag) {
+  private List<String> getArticleIdsForTag(String tag, String date) {
     List<String> ids = new ArrayList<>();
 
     Iterator it = articles.entrySet().iterator();
     while (it.hasNext()) {
       Map.Entry pair = (Map.Entry) it.next();
       Article article = (Article) pair.getValue();
-      if (article.getTags().contains(tag)) {
+      if (article.getTags().contains(tag) && date.equals(article.getDate())) {
         ids.add(article.getId());
       }
     }
@@ -87,5 +89,14 @@ public class ArticleService {
       allRelatedTags = new ArrayList<>(relatedTagSet);
     }
     return allRelatedTags;
+  }
+
+  private String formatDate(String date) {
+    return new StringBuilder(date.substring(0,4))
+            .append("-")
+            .append(date.substring(4,6))
+            .append("-")
+            .append(date.substring(6,8))
+            .toString();
   }
 }
