@@ -2,6 +2,7 @@ package au.com.vb.fairfax.service;
 
 import au.com.vb.fairfax.model.Article;
 import au.com.vb.fairfax.model.TagMetric;
+import au.com.vb.fairfax.repository.ArticleRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -9,15 +10,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticleService {
 
-  private static Map<String, Article> articles = new HashMap<>();
+  private ArticleRepository articleRepository = ArticleRepository.getInstance();
 
   public Article createArticle(Article article) {
 
-    articles.put(article.getId(), article);
+    articleRepository.getArticles().put(article.getId(), article);
     return article;
   }
 
   public Article retrieveArticle(String id) {
+
+   Article article = articleRepository.getArticles().entrySet()
+            .stream()
+            .filter(e -> e.getKey().equals(id))
+            .map(Map.Entry::getValue)
+            .findFirst()
+            .orElse(null);
+    return article;
+  }
+
+  public TagMetric retrieveTagsForNameAndDate(String name, String date) {
 
     Article article = articles.entrySet()
                       .stream()
@@ -38,7 +50,8 @@ public class ArticleService {
     List<String> articleIds = new ArrayList<String>();
     List<String> allRelatedTags = new ArrayList<>();
 
-    Iterator it = articles.entrySet().iterator();
+    Iterator it = articleRepository.getArticles().entrySet().iterator();
+
     while (it.hasNext()) {
       Map.Entry pair = (Map.Entry) it.next();
       Article article = (Article) pair.getValue();

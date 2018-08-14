@@ -45,7 +45,7 @@ public class ArticleServiceTest {
     String tagName = article1.getTags().get(0);
 
     ObjectMapper objectMapper = new ObjectMapper();
-    TagMetric tagMetric = articleService.retrieveTagForNameAndDate(tagName, article1.getDate());
+    TagMetric tagMetric = articleService.retrieveTagsForNameAndDate(tagName, "20160922");
     objectMapper.writeValue(new File("target/metrics.json"), tagMetric);
 
     List<String> ids = new ArrayList<>(Arrays.asList(article1.getId(), article2.getId()));
@@ -53,6 +53,9 @@ public class ArticleServiceTest {
             2,
             ids,
             new ArrayList<>(Arrays.asList("fitness", "science")));
+    Assert.assertTrue(expected.getArticles().containsAll(tagMetric.getArticles()));
+    Assert.assertTrue(expected.getRelated_tags().containsAll(tagMetric.getRelated_tags()));
+
     Assert.assertEquals(expected.getArticles(), tagMetric.getArticles());
     Assert.assertEquals(expected.getRelated_tags(), tagMetric.getRelated_tags());
   }
